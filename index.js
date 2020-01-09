@@ -36,4 +36,4 @@ async function downloadBlob(containerName, blobName) {
     }
 }
   
-downloadBlob('archives-prepress-1994', '419413-1.7');
+downloadBlob('archives-prepress-1994', '419413-1.7z');
