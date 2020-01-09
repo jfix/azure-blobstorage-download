@@ -1,9 +1,11 @@
 require('dotenv').config();
+const stream = require('stream');
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
 // Enter your storage account name and shared key
 const account = process.env.AZURE_STORAGEACCOUNT;
 const accountKey = process.env.AZURE_ACCESSKEY;
+
 
 // Use StorageSharedKeyCredential with storage account and account key
 // StorageSharedKeyCredential is only avaiable in Node.js runtime, not in browsers
@@ -13,21 +15,25 @@ const blobServiceClient = new BlobServiceClient(
   sharedKeyCredential
 );
 
-const containerName = process.env.AZURE_CONTAINERNAME;
-
-async function main() {
-    const containerClient = blobServiceClient.getContainerClient(containerName);
-  
-    let i = 1;
-    let iter = await containerClient.listBlobsFlat();
-    for await (const blob of iter) {
-        if (i === 1) {
-            const blockBlobClient = containerClient.getBlockBlobClient(blob.name);
-            const downloadBlockBlobResponse = await blockBlobClient.download(0);
-            await downloadBlockBlobResponse.readableStreamBody.pipe(process.stdout)
+async function downloadBlob(containerName, blobName) {
+    try {
+        const containerClient = blobServiceClient.getContainerClient(containerName);
+        if (!(await containerClient.exists())) {
+            console.log(`NO container exists with this name: ${containerName}`);
+            return;
         }
-
+        const blobClient = containerClient.getBlobClient(blobName);
+        if (!(await blobClient.exists())) {
+            console.log(`NO blob exists with this name: ${blobName}`);
+            return;
+        }
+        const buffer = await blobClient.downloadToBuffer();
+        const bufferStream = new stream.PassThrough();
+        bufferStream.end(buffer);
+        bufferStream.pipe(process.stdout);
+    } catch(e) {
+        console.log(`ERROR: ${e}`)
     }
 }
   
-main();
+downloadBlob('archives-prepress-1994', '419413-1.7');
