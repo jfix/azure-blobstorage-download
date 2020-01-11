@@ -19,21 +19,20 @@ async function downloadBlob(containerName, blobName) {
     try {
         const containerClient = blobServiceClient.getContainerClient(containerName);
         if (!(await containerClient.exists())) {
-            console.log(`NO container exists with this name: ${containerName}`);
-            return;
+            throw new Error(`No container exists with this name: ${containerName}`);
         }
         const blobClient = containerClient.getBlobClient(blobName);
         if (!(await blobClient.exists())) {
-            console.log(`NO blob exists with this name: ${blobName}`);
-            return;
+            throw new Error(`No blob exists with this name: ${blobName}`);
         }
         const buffer = await blobClient.downloadToBuffer();
         const bufferStream = new stream.PassThrough();
         bufferStream.end(buffer);
         bufferStream.pipe(process.stdout);
     } catch(e) {
-        console.log(`ERROR: ${e}`)
+        console.log(`${e}`);
+        return e;
     }
 }
   
-downloadBlob('archives-prepress-1994', '419413-1.7z');
+downloadBlob('archives-prepress-199', '419413-1.7');
