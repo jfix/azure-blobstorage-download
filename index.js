@@ -15,24 +15,23 @@ const blobServiceClient = new BlobServiceClient(
   sharedKeyCredential
 );
 
-async function downloadBlob(containerName, blobName) {
+async function downloadBlob(containerName, blobName, stdout = process.stdout) {
     try {
         const containerClient = blobServiceClient.getContainerClient(containerName);
         if (!(await containerClient.exists())) {
-            throw new Error(`No container exists with this name: ${containerName}`);
+            throw new Error(`Error: No container exists with this name: ${containerName}`);
         }
         const blobClient = containerClient.getBlobClient(blobName);
         if (!(await blobClient.exists())) {
-            throw new Error(`No blob exists with this name: ${blobName}`);
+            throw new Error(`Error: No blob exists with this name: ${blobName}`);
         }
         const buffer = await blobClient.downloadToBuffer();
         const bufferStream = new stream.PassThrough();
         bufferStream.end(buffer);
-        bufferStream.pipe(process.stdout);
+        bufferStream.pipe(stdout);
+        return true;
     } catch(e) {
-        console.log(`${e}`);
-        return e;
+        return Promise.reject(new Error(e))
     }
 }
-  
-downloadBlob('archives-prepress-199', '419413-1.7');
+module.exports = downloadBlob
