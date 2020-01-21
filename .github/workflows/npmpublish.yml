@@ -1,4 +1,4 @@
-name: Node.js Package
+name: Publish module to npm and gpr
 
 on:
   release:
