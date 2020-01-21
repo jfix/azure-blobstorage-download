@@ -1,5 +1,9 @@
 name: Publish module to npm and gpr
 
+env:
+  AZURE_ACCESSKEY: ${{secrets.AZURE_ACCESSKEY}}
+  AZURE_STORAGEACCOUNT: ${{secrets.AZURE_STORAGEACCOUNT}}
+
 on:
   release:
     types: [created]
