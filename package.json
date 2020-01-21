@@ -1,11 +1,14 @@
 {
-  "name": "azure-blobstorage-download",
+  "name": "@jfix/azure-blobstorage-download",
   "version": "1.0.0",
   "description": "Secure download of files from Azure blob storage",
   "main": "index.js",
   "scripts": {
     "test": "jest",
     "test-watch": "jest --watch"
+  },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com/"
   },
   "keywords": [],
   "author": "",
