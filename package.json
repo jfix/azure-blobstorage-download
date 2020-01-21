@@ -1,7 +1,7 @@
 {
-  "name": "azure-blobstorage-test",
+  "name": "azure-blobstorage-download",
   "version": "1.0.0",
-  "description": "",
+  "description": "Secure download of files from Azure blob storage",
   "main": "index.js",
   "scripts": {
     "test": "jest --watch"
