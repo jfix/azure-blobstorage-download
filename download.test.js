@@ -1,5 +1,5 @@
 const devNull = require('dev-null')
-const downloadBlob = require('./index')
+const downloadBlob = require('./download')
 
 const validContainer = 'archives-prepress-1994'
 const validBlob = '419413-1.7z'
