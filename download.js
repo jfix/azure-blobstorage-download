@@ -15,6 +15,22 @@ const blobServiceClient = new BlobServiceClient(
   sharedKeyCredential
 );
 
+async function blobExists(containerName, blobName) {
+    try {
+        const containerClient = blobServiceClient.getContainerClient(containerName);
+        if (!(await containerClient.exists())) {
+            return Promise.reject(false)
+        }
+        const blobClient = containerClient.getBlobClient(blobName);
+        if (!(await blobClient.exists())) {
+            return Promise.reject(false)
+        }
+        return Promise.resolve(true)
+    } catch(e) {
+        return Promise.reject(new Error(e))
+    }
+} 
+
 async function downloadBlob(containerName, blobName, stdout = process.stdout) {
     try {
         const containerClient = blobServiceClient.getContainerClient(containerName);
@@ -34,4 +50,7 @@ async function downloadBlob(containerName, blobName, stdout = process.stdout) {
         return Promise.reject(new Error(e))
     }
 }
-module.exports = downloadBlob
+module.exports = {
+    blobExists,
+    downloadBlob
+}

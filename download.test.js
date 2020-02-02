@@ -1,11 +1,20 @@
 const devNull = require('dev-null')
-const downloadBlob = require('./download')
+const {downloadBlob, blobExists } = require('./download')
 
 const validContainer = 'archives-prepress-1994'
 const validBlob = '419413-1.7z'
 
 const invalidContainer = 'foobar-1234'
 const invalidBlob = 'blah.7z'
+
+describe('Test existing file', () => {
+    test('inexistant blob returns false', async () => {
+        await expect(blobExists(invalidContainer, invalidBlob)).rejects.toBeFalsy()
+    })
+    test('existing container and blob returns true', async () => {
+        await expect(blobExists(validContainer, validBlob)).resolves.toBeTruthy()
+    })
+})
 
 describe('Error handling', () => {
     test('inexistant blob throws error', async () => {
