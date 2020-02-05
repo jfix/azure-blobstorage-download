@@ -11,6 +11,9 @@ describe('Test existing file', () => {
     test('inexistant blob returns false', async () => {
         await expect(blobExists(invalidContainer, invalidBlob)).rejects.toBeFalsy()
     })
+    test('existing container but missing blob returns false', async () => {
+        await expect(blobExists(validContainer, invalidBlob)).rejects.toBeFalsy()
+    })
     test('existing container and blob returns true', async () => {
         await expect(blobExists(validContainer, validBlob)).resolves.toBeTruthy()
     })
@@ -19,6 +22,7 @@ describe('Test existing file', () => {
 describe('Error handling', () => {
     test('inexistant blob throws error', async () => {
         await expect(downloadBlob(validContainer, invalidBlob)).rejects.toThrow('No blob exists with this name')
+        await expect(downloadBlob('archives-pod', 'cfe-2019-2173-en.7z')).rejects.toThrow('No blob exists with this name')
     })
     test('inexistant container throws error', async () => {
         await expect(downloadBlob(invalidContainer, validBlob)).rejects.toThrow('No container exists with this name')
