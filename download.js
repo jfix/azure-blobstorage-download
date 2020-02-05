@@ -6,7 +6,6 @@ const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storag
 const account = process.env.AZURE_STORAGEACCOUNT;
 const accountKey = process.env.AZURE_ACCESSKEY;
 
-
 // Use StorageSharedKeyCredential with storage account and account key
 // StorageSharedKeyCredential is only avaiable in Node.js runtime, not in browsers
 const sharedKeyCredential = new StorageSharedKeyCredential(account, accountKey);
@@ -27,7 +26,7 @@ async function blobExists(containerName, blobName) {
         }
         return Promise.resolve(true)
     } catch(e) {
-        return Promise.reject(new Error(e))
+        return Promise.reject(e)
     }
 } 
 
@@ -47,7 +46,7 @@ async function downloadBlob(containerName, blobName, stdout = process.stdout) {
         bufferStream.pipe(stdout);
         return true;
     } catch(e) {
-        return Promise.reject(new Error(e))
+        return Promise.reject(e)
     }
 }
 module.exports = {
